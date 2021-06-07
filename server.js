@@ -17,6 +17,7 @@ mongoose.connection.once('open', () => {
 require('./models/Player');
 const Player = mongoose.model('Player');
 require('./models/Gameroom');
+const Gameroom = mongoose.model('Gameroom');
 require('./models/Message');
 
 const path = require('path');
@@ -28,6 +29,9 @@ app.use('/', express.static(path.join(__dirname, 'client')));
 app.use(express.json());
 // Add error handlers
 
+// Add middlewares
+const auth = require('./middlewares/auth');
+
 // app.get('/', (req, res) => {
 //   res.send('Homepage!');
 // });
@@ -35,6 +39,12 @@ app.use(express.json());
 app.post('/register', async (req, res) => {
   const { name, password } = req.body;
   // Add Joi
+  const playerExists = await Player.findOne({ name });
+  if (playerExists) {
+    return res.json({
+      message: "Player already exists."
+    });
+  };
   const player = new Player({ name, password });
   // Use bcryptjs
   await player.save();
@@ -55,6 +65,22 @@ app.post('/login', async (req, res) => {
   res.json({
     message: "Player [" + name + "] logged in successfully!",
     token,
+  });
+});
+
+// Create a game room
+app.post('/room', auth, async (req, res) => {
+  const { name } = req.body;
+  const roomExists = await Gameroom.findOne({ name });
+  if (roomExists) {
+    return res.json({
+      message: "Game room already exists."
+    });
+  };
+  const gameroom = new Gameroom({ name });
+  await gameroom.save();
+  res.json({
+    message: "Game room created."
   });
 });
 
