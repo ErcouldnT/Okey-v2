@@ -1,6 +1,5 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DB, {
   useUnifiedTopology: true,
@@ -22,9 +21,8 @@ require('./models/Message');
 
 const path = require('path');
 const express = require('express');
-const { userInfo } = require('os');
 const app = express();
- 
+
 app.use('/', express.static(path.join(__dirname, 'client')));
 app.use(express.json());
 // Add error handlers
@@ -36,6 +34,7 @@ const auth = require('./middlewares/auth');
 //   res.send('Homepage!');
 // });
 
+// Register a player
 app.post('/register', async (req, res) => {
   const { name, password } = req.body;
   // Add Joi
@@ -53,6 +52,7 @@ app.post('/register', async (req, res) => {
   });
 });
 
+// Player login
 app.post('/login', async (req, res) => {
   const { name, password } = req.body;
   const player = await Player.findOne({ name, password });
@@ -84,6 +84,7 @@ app.post('/room', auth, async (req, res) => {
   });
 });
 
+// Redirect homepage for 404s
 app.get('/*', (req, res) => {
   res.redirect('/');
 });
