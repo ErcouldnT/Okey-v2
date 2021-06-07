@@ -21,10 +21,19 @@ require('./models/Message');
 
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 const app = express();
+app.enable('trust proxy');
 
-app.use('/', express.static(path.join(__dirname, 'client')));
+app.use('/', express.static(path.join(__dirname, 'vite-client', 'dist')));
 app.use(express.json());
+app.use(helmet());
+app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+  app.use(cors());
+};
 // Add error handlers
 
 // Add middlewares
