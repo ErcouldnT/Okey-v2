@@ -1,4 +1,5 @@
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DB, {
@@ -50,6 +51,11 @@ app.post('/login', async (req, res) => {
       message: "Wrong password or Player not found."
     });
   };
+  const token = jwt.sign({ id: player.id }, process.env.SECRET);
+  res.json({
+    message: "Player [" + name + "] logged in successfully!",
+    token,
+  });
 });
 
 app.get('/*', (req, res) => {
