@@ -10,7 +10,7 @@ export default function Register(props) {
     const name = nameRef.current.value
     const password = passwordRef.current.value
 
-    axios.post("http://localhost:5000/register", {
+    axios.post(process.env.NODE_ENV === "production" ? "/register" : "http://localhost:5000/register", {
       name,
       password
     }).then(res => {

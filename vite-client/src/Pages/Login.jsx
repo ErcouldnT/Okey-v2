@@ -10,7 +10,7 @@ export default function Login(props) {
     const name = nameRef.current.value
     const password = passwordRef.current.value
 
-    axios.post("http://localhost:5000/login", {
+    axios.post(process.env.NODE_ENV === "production" ? "/login" : "http://localhost:5000/login", {
       name,
       password
     }).then(res => {

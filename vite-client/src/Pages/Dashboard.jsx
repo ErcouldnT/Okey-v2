@@ -17,12 +17,12 @@ export default function Dashboard() {
   ]
 
   const getRooms = () => {
-    axios.get("http://localhost:5000/rooms", {
+    axios.get(process.env.NODE_ENV === "production" ? "/rooms" : "http://localhost:5000/rooms", {
       headers: {
         auth: localStorage.getItem("Auth_token")
       }
     }).then(res => {
-      // console.log(res.data)
+      console.log(res.data)
       setGamerooms(res.data)
     }).catch(err => {
       setTimeout(getRooms, 3000)
