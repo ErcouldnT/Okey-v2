@@ -21,7 +21,6 @@ require('./models/Message');
 
 const path = require('path');
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const app = express();
@@ -32,7 +31,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan('dev'));
 if (process.env.NODE_ENV === "development") {
-  app.use(cors());
+  app.use(require('cors')());
 };
 // Add error handlers
 
@@ -93,6 +92,12 @@ app.post('/room', auth, async (req, res) => {
   });
 });
 
+// Get all rooms
+app.get('/rooms', auth, async (req, res) => {
+  const gamerooms = await Gameroom.find({});
+  res.json(gamerooms);
+});
+
 // Redirect homepage for 404s
 app.get('/*', (req, res) => {
   res.redirect('/');
@@ -103,3 +108,23 @@ const server = app.listen(process.env.PORT || 5000, () => {
   const port = server.address().port;
   console.log('Listening on http://' + host + ':' + port + '/');
 });
+
+const io = require('socket.io')(server);
+io.use(async (socket, next) => {
+  try {
+    const token = socket.handshake.query.token;
+    const payload = await jwt.verify(token, process.env.SECRET);
+    socket.player_id = payload.id;
+    next();
+  } catch (error) {
+    console.log(error);
+  };
+})
+
+io.on('connection', (socket) => {
+  console.log("Connected:", socket.player_id);
+
+  socket.on('disconnect', () => {
+    console.log("Disconnected:", socket.player_id);
+  })
+})
