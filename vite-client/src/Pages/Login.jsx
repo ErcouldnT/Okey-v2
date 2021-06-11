@@ -16,8 +16,10 @@ export default function Login(props) {
     }).then(res => {
       makeToast("success", res.data.message)
       console.log(res.data);
-      localStorage.setItem('Auth_token', res.data.token)
-      props.history.push("/dashboard")
+      if (res.data.token) {
+        localStorage.setItem('Auth_token', res.data.token)
+        props.history.push("/dashboard")
+      }
     }).catch(err => {
       makeToast("error", err.res.data.message)
     })
