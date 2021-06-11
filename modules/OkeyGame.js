@@ -170,9 +170,9 @@ class Okey {
   nextGame() {
     this.playerWin(0); // Hard-coded
     if (this.zeroPointCheck()) { // Invoke this when some-one ends
-      this.round += 1;
       return console.log("Game-Over!");
     };
+    this.round += 1;
     console.log("Next round is started!", "Round:", this.round);
     const new_player_list = new Array;
     for (let i = 0; i < this.players.length; i++) {

@@ -5,6 +5,8 @@ const gameroomSchema = new mongoose.Schema({
     type: String,
     required: "Name is required!"
   },
+}, {
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Gameroom', gameroomSchema);

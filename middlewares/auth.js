@@ -3,10 +3,8 @@ const jwt = require('jsonwebtoken');
 module.exports = async (req, res, next) => {
   try {
     if (!req.headers.auth) {
-      // throw
-      res.status(401).json({
-        message: "Forbidden access."
-      });
+      const error = new Error("Please login.");
+      next(error);
     } else {
       const token = req.headers.auth;
       const payload = await jwt.verify(token, process.env.SECRET);
