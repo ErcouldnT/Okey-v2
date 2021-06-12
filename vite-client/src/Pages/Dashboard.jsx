@@ -28,7 +28,7 @@ export default function Dashboard() {
       <div className="cardBody">
         <div className="inputGroup">
           <label htmlFor="gameroom">Room name</label>
-          <input type="text" name="gameroom" id="gameroom" autoFocus placeholder="secret room"/>
+          <input type="text" name="gameroom" id="gameroom" autoFocus placeholder=" secret room"/>
         </div>
         <button>Create</button>
         <div className="gamerooms">

@@ -36,7 +36,7 @@ export default function Login(props) {
             name="text" 
             id="player" 
             autoFocus 
-            placeholder="ercode"
+            placeholder=" ercode"
             ref={nameRef}/>
         </div>
         <div className="inputGroup">
@@ -45,7 +45,7 @@ export default function Login(props) {
             type="password" 
             name="password" 
             id="password" 
-            placeholder="your password"
+            placeholder=" your password"
             ref={passwordRef}/>
         </div>
         <button onClick={loginPlayer}>Sign in</button>

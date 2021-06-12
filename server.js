@@ -49,8 +49,9 @@ app.use(errorHandler);
 // Register a player
 app.post('/register', async (req, res, next) => {
   try {
-    const { name, password } = req.body;
+    let { name, password } = req.body;
     // Add Joi
+    name = name.toLowerCase().trim();
     const playerExists = await Player.findOne({ name });
     if (playerExists) {
       return res.json({
@@ -61,7 +62,7 @@ app.post('/register', async (req, res, next) => {
     // Use bcryptjs
     await player.save();
     res.json({
-      message: "Player [" + name + "] registered successfully!"
+      message: "Hi " + name + ", registered successfully!"
     });
   } catch (error) {
     next(error);
@@ -71,7 +72,8 @@ app.post('/register', async (req, res, next) => {
 // Player login
 app.post('/login', async (req, res, next) => {
   try {
-    const { name, password } = req.body;
+    let { name, password } = req.body;
+    name = name.toLowerCase().trim();
     const player = await Player.findOne({ name, password });
     if (!player) {
       return res.json({
@@ -80,7 +82,7 @@ app.post('/login', async (req, res, next) => {
     };
     const token = jwt.sign({ id: player.id }, process.env.SECRET);
     res.json({
-      message: "Player [" + name + "] logged in successfully!",
+      message: "Hi " + name + ", logged in successfully!",
       token,
     });
   } catch (error) {

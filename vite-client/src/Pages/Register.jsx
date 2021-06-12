@@ -33,7 +33,7 @@ export default function Register(props) {
             name="text" 
             id="player" 
             autoFocus 
-            placeholder="ercode" 
+            placeholder=" ercode" 
             ref={nameRef}/>
         </div>
         <div className="inputGroup">
@@ -42,7 +42,7 @@ export default function Register(props) {
             type="password" 
             name="password" 
             id="password" 
-            placeholder="your password" 
+            placeholder=" your password" 
             ref={passwordRef}/>
         </div>
         <button onClick={registerPlayer}>Sign up</button>
