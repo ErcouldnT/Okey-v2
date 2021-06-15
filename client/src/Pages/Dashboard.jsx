@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const [gamerooms, setGamerooms] = useState([])
 
   const getRooms = async () => {
     try {
-      const { data } = await axios.get(process.env.NODE_ENV === "production" ? "/rooms" : "http://localhost:5000/rooms", {
+      const { data } = await axios.get(process.env.NODE_ENV === "production" ? "/rooms" : "http://localhost:9999/rooms", {
         headers: {
           auth: localStorage.getItem("Auth_token")
         }

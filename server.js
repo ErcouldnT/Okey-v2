@@ -26,7 +26,7 @@ const morgan = require('morgan');
 const app = express();
 app.enable('trust proxy');
 
-app.use('/', express.static(path.join(__dirname, 'vite-client', 'dist')));
+app.use('/', express.static(path.join(__dirname, 'client', 'dist')));
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('dev'));
@@ -131,10 +131,15 @@ const server = app.listen(process.env.PORT || 5000, () => {
   console.log('Listening on http://' + host + ':' + port + '/');
 });
 
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://okey.erkuttekoglu.com",
+    methods: ["GET", "POST"],
+  }
+});
 io.use(async (socket, next) => {
   try {
-    const token = socket.handshake.query.token;
+    const token = socket.handshake.auth.token;
     const payload = await jwt.verify(token, process.env.SECRET);
     socket.player_id = payload.id;
     next();

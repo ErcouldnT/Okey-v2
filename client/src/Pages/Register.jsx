@@ -2,24 +2,21 @@ import React from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-export default function Login(props) {
+export default function Register(props) {
   const nameRef = React.createRef()
   const passwordRef = React.createRef()
 
-  const loginPlayer = () => {
+  const registerPlayer = () => {
     const name = nameRef.current.value
     const password = passwordRef.current.value
 
-    axios.post(process.env.NODE_ENV === "production" ? "/login" : "http://localhost:5000/login", {
+    axios.post(process.env.NODE_ENV === "production" ? "/register" : "http://localhost:9999/register", {
       name,
       password
     }).then(res => {
       makeToast("success", res.data.message)
       console.log(res.data);
-      if (res.data.token) {
-        localStorage.setItem('Auth_token', res.data.token)
-        props.history.push("/dashboard")
-      }
+      props.history.push("/login")
     }).catch(err => {
       makeToast("error", err.res.data.message)
     })
@@ -27,7 +24,7 @@ export default function Login(props) {
 
   return (
     <div className="card">
-      <div className="cardHeader">Login</div>
+      <div className="cardHeader">Register</div>
       <div className="cardBody">
         <div className="inputGroup">
           <label htmlFor="player">Your name</label>
@@ -36,7 +33,7 @@ export default function Login(props) {
             name="text" 
             id="player" 
             autoFocus 
-            placeholder=" ercode"
+            placeholder=" ercode" 
             ref={nameRef}/>
         </div>
         <div className="inputGroup">
@@ -45,10 +42,10 @@ export default function Login(props) {
             type="password" 
             name="password" 
             id="password" 
-            placeholder=" your password"
+            placeholder=" your password" 
             ref={passwordRef}/>
         </div>
-        <button onClick={loginPlayer}>Sign in</button>
+        <button onClick={registerPlayer}>Sign up</button>
       </div>
     </div>
   )

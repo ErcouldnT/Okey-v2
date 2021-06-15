@@ -1,22 +1,27 @@
 import React from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
+import { withRouter } from 'react-router-dom'
 
-export default function Register(props) {
+function Login(props) {
   const nameRef = React.createRef()
   const passwordRef = React.createRef()
 
-  const registerPlayer = () => {
+  const loginPlayer = () => {
     const name = nameRef.current.value
     const password = passwordRef.current.value
 
-    axios.post(process.env.NODE_ENV === "production" ? "/register" : "http://localhost:5000/register", {
+    axios.post(process.env.NODE_ENV === "production" ? "/login" : "http://localhost:9999/login", {
       name,
       password
     }).then(res => {
       makeToast("success", res.data.message)
       console.log(res.data);
-      props.history.push("/login")
+      if (res.data.token) {
+        localStorage.setItem('Auth_token', res.data.token)
+        props.history.push("/dashboard")
+        props.setupSocket()
+      }
     }).catch(err => {
       makeToast("error", err.res.data.message)
     })
@@ -24,7 +29,7 @@ export default function Register(props) {
 
   return (
     <div className="card">
-      <div className="cardHeader">Register</div>
+      <div className="cardHeader">Login</div>
       <div className="cardBody">
         <div className="inputGroup">
           <label htmlFor="player">Your name</label>
@@ -33,7 +38,7 @@ export default function Register(props) {
             name="text" 
             id="player" 
             autoFocus 
-            placeholder=" ercode" 
+            placeholder=" ercode"
             ref={nameRef}/>
         </div>
         <div className="inputGroup">
@@ -42,11 +47,13 @@ export default function Register(props) {
             type="password" 
             name="password" 
             id="password" 
-            placeholder=" your password" 
+            placeholder=" your password"
             ref={passwordRef}/>
         </div>
-        <button onClick={registerPlayer}>Sign up</button>
+        <button onClick={loginPlayer}>Sign in</button>
       </div>
     </div>
   )
 }
+
+export default withRouter(Login)
