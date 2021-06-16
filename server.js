@@ -18,6 +18,7 @@ const Player = mongoose.model('Player');
 require('./models/Gameroom');
 const Gameroom = mongoose.model('Gameroom');
 require('./models/Message');
+const Message = mongoose.model('Message');
 
 const path = require('path');
 const express = require('express');
@@ -153,5 +154,33 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log("Disconnected:", socket.player_id);
+  })
+
+  socket.on("joinRoom", ({ gameroomID }) => {
+    socket.join(gameroomID);
+    console.log("A user joined room:", gameroomID);
+  })
+
+  socket.on("leaveRoom", ({ gameroomID }) => {
+    socket.leave(gameroomID);
+    console.log("A user left room:", gameroomID);
+  })
+
+  socket.on("gameroomMessage", async ({ gameroomID, message }) => {
+    if (message.trim().length > 0) {
+      const user = await Player.findOne({ _id: socket.player_id })
+      const new_message = new Message({
+        gameroom: gameroomID,
+        player: socket.player_id,
+        message
+      })
+      io.to(gameroomID).emit("newMessage", {
+        message,
+        name: user.name,
+        playerID: socket.player_id
+      })
+
+      await new_message.save();
+    }
   })
 })

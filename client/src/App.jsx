@@ -43,19 +43,31 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={Index} exact />
+        <Route 
+          path="/" 
+          component={Index} 
+          exact 
+        />
         <Route
           path="/login"
           render={() => <Login setupSocket={setupSocket} />}
           exact
         />
-        <Route path="/register" component={Register} exact />
+        <Route 
+          path="/register" 
+          component={Register} 
+          exact 
+        />
         <Route
           path="/dashboard"
           render={() => <Dashboard socket={socket} />}
           exact
         />
-        <Route path="/test" component={Test} exact />
+        <Route 
+          path="/test" 
+          component={Test} 
+          exact 
+        />
         <Route
           path="/room/:id"
           render={() => <Gameroom socket={socket} />}
