@@ -121,9 +121,9 @@ app.get('/rooms', auth, async (req, res, next) => {
   };
 });
 
-// Redirect homepage for 404s
-app.get('/*', (req, res) => {
-  res.redirect('/');
+// Redirect to react-router-dom for 404s
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/dist/index.html'));
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
